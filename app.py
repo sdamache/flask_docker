@@ -12,10 +12,10 @@ from werkzeug.serving import run_simple
 
 app = Flask(__name__)
 
-# Postgres_User = 'postgres'
-# POSTGRES_PW = 'Define your own password'
-# POSTGRES_HOST = "Localhost"
-# POSTGRES_DB = "test"
+# POSTGRES_USER='postgres'
+# POSTGRES_PW='Define your own password'
+# POSTGRES_HOST="localhost:5432"
+# POSTGRES_DB="test"
 
 app.config['SQLALCHEMY_DATABASE_URI'] = (
     f'postgresql+psycopg2://{os.getenv("POSTGRES_USER")}:' + f'{os.getenv("POSTGRES_PW")}@{os.getenv("POSTGRES_HOST")}/{os.getenv("POSTGRES_DB")}'

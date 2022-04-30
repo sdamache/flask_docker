@@ -10,6 +10,13 @@ COPY ./requirements.txt /app/requirements.txt
 WORKDIR /app
 
 # install the dependencies and packages in the requirements file
+RUN apt-get update
+RUN apt-get install -y gcc
+RUN apt-get install -y libxml2-dev libxslt1-dev zlib1g-dev g++
+RUN apt-get update
+RUN apt-get install -y tdsodbc unixodbc-dev
+RUN apt install unixodbc-bin -y
+RUN apt-get clean -y
 RUN pip install -r requirements.txt
 
 # copy every content from the local file to the image

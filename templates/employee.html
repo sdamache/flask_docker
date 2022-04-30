@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" 
+    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" 
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      
+</head>
+
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+   
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Flask App</a>
+          
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Dropdown
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" href="#">Action</a></li>
+                  <li><a class="dropdown-item" href="#">Another action</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="#">Something else here</a></li>
+                </ul>
+              </li>
+              <!-- <li class="nav-item">
+                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+              </li> -->
+            </ul>
+            <form class="d-flex">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+          </div>
+        </div>
+    </nav>
+    <br>
+    <br>
+    <div class="mx-auto" style="width: 200px;">
+        <button type="button" class="btn btn-primary btn-lg" id="showemployee">Show Employees</button>
+    </div>
+    <br>
+
+    <div id="employeeDv" style="display: none;;"></div>
+
+    <br><br>
+    <div style="display: none;;">
+        <p >
+            ajdsajkdkaskjdaskjk
+        </p>
+    </div>
+    
+    <div id="employeeDetails" class="card mx-auto" style="display: none; width: 200px;">
+        <h5 id="showEmployeeRole" class="card-header">Featured</h5>
+        <div class="card-body">
+          <h5 id="showEmployeeName" class="card-title">Special title treatment</h5>
+          <p id="showEmployeeDetails" class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+          <a href="#" class="btn btn-primary" onclick="closecard()">Close</a>
+        </div>
+    </div>
+
+</body>
+
+</html>
+
+<script>
+    $(document).ready(function () {
+    });
+    $("#showemployee").click(function () {
+        $.getJSON('employee', function(data){
+            var html = "<div class='list-group col-sm-2 row mx-auto'>";
+            for (var i = 0; i < data.length; i++) {
+                html += "<button type='button' id= '"+ (i+1) +  "'class='list-group-item list-group-item-action' onclick='getEmployee(this.id)'>"+ data[i] + "</button>"
+            }
+            html += "</div>"
+            $('#employeeDv').html(html);
+            $('#employeeDv').show();
+        });
+    });
+    function getEmployee(id){
+        var params ={id: id}
+        $.getJSON('employeeDetails', params, function(data){
+            document.getElementById("showEmployeeName").innerHTML = data.Name
+            document.getElementById("showEmployeeRole").innerHTML = data.Role
+            document.getElementById("showEmployeeDetails").innerHTML = "Age is "+data.Age+ " and works in Team: " + data.Team 
+            $('#employeeDetails').show();
+        });
+    }  
+    function closecard(){
+        document.getElementById("employeeDetails").style.display = 'none'
+    }
+</script>
