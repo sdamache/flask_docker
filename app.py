@@ -5,25 +5,24 @@ from flask_migrate import Migrate
 import os
 import psycopg2
 from psycopg2 import pool
-from prometheus_client import make_wsgi_app
+# from prometheus_client import make_wsgi_app
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from werkzeug.serving import run_simple
 
 
 app = Flask(__name__)
 
-# POSTGRES_USER='postgres'
-# POSTGRES_PW='Define your own password'
-# POSTGRES_HOST="localhost:5432"
-# POSTGRES_DB="test"
+POSTGRES_USER='postgres'
+POSTGRES_PW='root@1234'
+POSTGRES_HOST="localhost:5432"
+POSTGRES_DB="postgres"
 
-app.config['SQLALCHEMY_DATABASE_URI'] = (
-    f'postgresql+psycopg2://{os.getenv("POSTGRES_USER")}:' + f'{os.getenv("POSTGRES_PW")}@{os.getenv("POSTGRES_HOST")}/{os.getenv("POSTGRES_DB")}'
-)
-
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+try:
+    db_pool = psycopg2.pool.SimpleConnectionPool(1, 20, user=os.environ.get('POSTGRES_USER'), password=os.environ.get('POSTGRES_PW'), host=os.environ.get('POSTGRES_HOST'), database=os.environ.get('POSTGRES_DB'))
+    if not db_pool:
+        print("Not able to establish connection with db")
+except Exception as e:
+    print("Exception while trying to create connection pool %s" % str(e))
 
 @app.route('/')
 def hello_world():
@@ -31,8 +30,8 @@ def hello_world():
 
 @app.route("/employee", methods=["GET"])
 def employee():
-    select_query = '''select * from Employee'''    
-    db_conn = db.getconn()
+    select_query = '''SELECT * FROM employee;'''    
+    db_conn = db_pool.getconn()
     cursor = db_conn.cursor()
     cursor.execute(select_query)
     lst = cursor.fetchall()
@@ -51,8 +50,8 @@ def employeeDetails():
     print(request.args.get('id'))
     print(type(request.args.get('id')))
 
-    select_query = "select * from Employee where id = "+request.args.get('id')+";"
-    db_conn = db.getconn()
+    select_query = "select * from employee where id = "+request.args.get('id')+";"
+    db_conn = db_pool.getconn()
     cursor = db_conn.cursor()
     cursor.execute(select_query)
     lst = cursor.fetchall()
@@ -63,7 +62,7 @@ def employeeDetails():
     else:
         data = {'Name': 'dummy', 'Age':0, 'Role': 'SD', 'Team': 'Swaas'} 
     return jsonify(data)
-
+ 
 ################### MONITORING ###############################################
 # provide app's version and deploy environment/config name to set a gauge metric
 # register_metrics(app, app_version="v0.1", app_config="staging")

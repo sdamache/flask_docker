@@ -1,7 +1,7 @@
 # start by pulling the python image
 	# checkov:skip=CKV_DOCKER_2: ADD REASON
 	# checkov:skip=CKV_DOCKER_3: ADD REASON
-FROM python:3.8-alpine
+FROM python:3.7.4-stretch
 
 # copy the requirements file into the image
 COPY ./requirements.txt /app/requirements.txt
