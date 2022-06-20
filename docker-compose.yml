@@ -1,0 +1,55 @@
+version: '3.3'
+
+services:
+  # application API service
+  api_service:
+    # a name we want our container to be named.
+    container_name: flask_docker_postgres
+
+    # the API image we created earlier on
+    image: nikhildsai/flask_docker
+
+    volumes:
+      - '/docker-compose-v2'
+
+    ports:
+    # mapping the container port 5000 to the host port locally on my computer 5001
+      - 5001:5000
+
+    environment:
+    # environment variables for my API application
+      - APP_SETTING=development
+      - DATABASE_URL=postgres://postgres:postgres@flask_postgres:5432/test
+      - POSTGRES_HOST=flask_postgres
+      - POSTGRES_PORT=5432  # this is the port that the postgres container is running on
+      - POSTGRES_USER=postgres
+      - POSTGRES_PW=root@1234  # this is the password for the postgres user
+      - POSTGRES_DB=test
+
+    depends_on:
+    # this makes this service to wait for the amity_db service to come up first before it runs
+      - flask_postgres
+
+    links:
+    # this links this service to the amity_db service
+      - flask_postgres
+
+    
+  # apostgresql database server service
+  flask_postgres:
+
+    # container name.
+    container_name: flask_postgres
+
+    # database image we created earlier on
+    image: postgres:latest
+
+    # mapping the container port 5432 to the host port locally on my computer 5432
+    # i did this for debugging purposes, so as to access the DB and confirm that indeed 
+    # the database was created and migrations applied.
+    ports:
+      - 5432:5432
+    
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root@1234

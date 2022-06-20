@@ -1,0 +1,18 @@
+version: '3.3'
+
+services:
+  # application API service
+  api_service:
+    # a name we want our container to be named.
+    container_name: flask_docker_postgres
+
+    # the API image we created earlier on
+    image: nikhildsai/flask_docker
+
+    volumes:
+      - '/docker-compose-v2'
+
+    ports:
+    # mapping the container port 5000 to the host port locally on my computer 5001
+      - 5000:5000
+

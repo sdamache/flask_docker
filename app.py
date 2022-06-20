@@ -14,7 +14,7 @@ app = Flask(__name__)
 
 POSTGRES_USER='postgres'
 POSTGRES_PW='root@1234'
-POSTGRES_HOST="localhost:5432"
+POSTGRES_HOST="0.0.0.0:5432"
 POSTGRES_DB="postgres"
 
 try:
@@ -76,4 +76,4 @@ def employeeDetails():
 
 if __name__ == '__main__':
    app.run(debug=True,host='0.0.0.0',port=5000)
- 
+
