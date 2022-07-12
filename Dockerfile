@@ -23,6 +23,6 @@ RUN pip install -r requirements.txt
 COPY . /app
 
 # configure the container to run in an executed manner
-# ENTRYPOINT [ "python" ]
+ENTRYPOINT [ "python" ]
 
-CMD ["python", "./app.py"]
+CMD ["app.py"]
