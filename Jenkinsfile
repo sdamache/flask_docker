@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Build Application') {
             steps {
-                echo '=== Building Python-Flask Application ==='
+                echo '== Building Python-Flask Application =='
                 // sh "pip install -r requirements.txt"
                 sh 'pip install flask'
             }
