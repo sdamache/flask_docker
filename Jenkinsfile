@@ -42,5 +42,5 @@ pipeline {
         //                 app.push('latest')
         //             }
         //         }
-        //     }
-        // }
+            }
+        }
